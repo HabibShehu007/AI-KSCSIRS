@@ -1,12 +1,18 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
+// Main User Flow Imports
+import UserLayout from "./users/layouts/UserLayout";
 import Landing from "./users/landing/Landing";
-import Signup from "./users/auth/Signup";
+import Signup from "./users/auth/SignUp/Signup";
 import Login from "./users/auth/Login";
-import AdminLogin from "./admin/auth/AdminLogin";
+import UserDashboard from "./users/dashboard/UserDashboard";
+import MessagePage from "./users/message/MessagePage";
+import UserReports from "./users/UserReports/UserReports";
+import Profile from "./users/profile/Profile";
 
 // Central Admin portal
 import CentralLayout from "./admin/central/Layout/CentralLayout";
+import AdminLogin from "./admin/auth/AdminLogin";
 import Dashboard from "./admin/central/pages/Dashboard";
 import Users from "./admin/central/modules/users/Users";
 import Complaints from "./admin/central/modules/complaints/Complaints";
@@ -14,11 +20,11 @@ import Contacts from "./admin/central/modules/contacts/Contacts";
 import UserLogs from "./admin/central/modules/UserLogs/UserLogs";
 
 // Police department portal imports
-import PoliceLayout from "./admin/departments/police/PoliceLayout";
+import PoliceLayout from "./admin/departments/police/layout/PoliceLayout";
 import PoliceDashboard from "./admin/departments/police/Dashboard";
-import PoliceUsers from "./admin/departments/police/Users";
+import PoliceUsers from "./admin/departments/police/users/Users";
 import PoliceSettings from "./admin/departments/police/Settings";
-import PoliceComplaints from "./admin/departments/police/Complaints";
+import PoliceComplaints from "./admin/departments/police/PoliceComplaints";
 
 // Immigration department portal imports
 import ImmigrationLayout from "./admin/departments/immigration/ImmigrationLayout";
@@ -43,10 +49,17 @@ const App = () => {
   return (
     <Router>
       <Routes>
-        {/* Redirect root user landing page */}
+        {/* Main User Routes */}
         <Route path="/" element={<Landing />} />
         <Route path="/user/auth/signup" element={<Signup />} />
         <Route path="/user/auth/login" element={<Login />} />
+
+        <Route path="/user" element={<UserLayout />}>
+          <Route path="dashboard" element={<UserDashboard />} />
+          <Route path="message/:agency" element={<MessagePage />} />
+          <Route path="reports" element={<UserReports />} />
+          <Route path="profile" element={<Profile />} />
+        </Route>
 
         {/* Admin login route */}
         <Route path="/admin/login" element={<AdminLogin />} />

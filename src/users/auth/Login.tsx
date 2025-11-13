@@ -46,8 +46,23 @@ export default function Login() {
       email: form.email,
     });
 
-    // Simulate login success
-    navigate("/dashboard");
+    // ✅ Try to find matching signup data
+    const logs = JSON.parse(localStorage.getItem("adminLogs") || "[]");
+    const signupEntry = logs.find(
+      (entry: any) =>
+        entry.action === "signup" && entry.payload.email === form.email
+    );
+
+    if (signupEntry) {
+      const { name, phone, email } = signupEntry.payload;
+
+      // ✅ Store real user info from signup
+      localStorage.setItem("userInfo", JSON.stringify({ name, phone, email }));
+
+      navigate("/user/dashboard");
+    } else {
+      alert("No user found with this email. Please sign up first.");
+    }
   };
 
   return (
@@ -96,7 +111,7 @@ export default function Login() {
         {/* Optional Admin Portal Link */}
         <div className="mt-6 text-center">
           <button
-            onClick={() => navigate("/admin")}
+            onClick={() => navigate("/admin/login")}
             className="text-sm text-blue-700 underline hover:text-blue-900"
           >
             Go to Admin Portal

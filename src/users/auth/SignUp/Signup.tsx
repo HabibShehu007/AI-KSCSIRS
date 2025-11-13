@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import StepIndicator from "./StepIndicator";
 import ProgressBar from "./ProgressBar";
-import StepForm from "./StepForm";
+import StepPersonalInfo from "./StepPersonalInfo";
+import StepContactInfo from "./StepContactInfo";
+import StepSecurity from "./StepSecurity";
 
-// ✅ Define types
 type LogPayload = {
   name?: string;
   email: string;
@@ -25,6 +25,7 @@ export default function Signup() {
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
   const [form, setForm] = useState({
+    nin: "",
     name: "",
     phone: "",
     email: "",
@@ -36,6 +37,7 @@ export default function Signup() {
     terms: false,
   });
 
+  const [isNINValidated, setIsNINValidated] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
 
   useEffect(() => {
@@ -45,23 +47,19 @@ export default function Signup() {
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
-    const { name, value, type, checked } = e.target;
+    const { name, value, type } = e.target;
+    const checked = (e.target as HTMLInputElement).checked;
     setForm({ ...form, [name]: type === "checkbox" ? checked : value });
   };
 
   const nextStep = () => setStep((prev) => Math.min(prev + 1, 3));
   const prevStep = () => setStep((prev) => Math.max(prev - 1, 1));
 
-  // ✅ Typed logToAdmin function
   const logToAdmin = (action: "signup", payload: LogPayload) => {
     const logs: LogEntry[] = JSON.parse(
       localStorage.getItem("adminLogs") || "[]"
     );
-    logs.push({
-      action,
-      payload,
-      timestamp: new Date().toISOString(),
-    });
+    logs.push({ action, payload, timestamp: new Date().toISOString() });
     localStorage.setItem("adminLogs", JSON.stringify(logs));
   };
 
@@ -71,7 +69,6 @@ export default function Signup() {
       return alert("Passwords do not match");
     if (!form.terms) return alert("You must accept the terms");
 
-    // ✅ Log to admin
     logToAdmin("signup", {
       name: form.name,
       email: form.email,
@@ -81,46 +78,65 @@ export default function Signup() {
       lga: form.lga,
     });
 
+    localStorage.setItem(
+      "userInfo",
+      JSON.stringify({
+        name: form.name,
+        email: form.email,
+        phone: form.phone,
+      })
+    );
+
     setShowSuccess(true);
     setTimeout(() => navigate("/user/auth/login"), 3000);
   };
 
-  const progress = step === 1 ? 33 : step === 2 ? 66 : 100;
-
   const isStepValid = () => {
-    if (step === 1) return form.name && form.phone && form.email;
+    if (step === 1)
+      return isNINValidated && form.name && form.phone && form.email;
     if (step === 2) return form.address && form.state && form.lga;
     if (step === 3) return form.password && form.confirmPassword && form.terms;
     return false;
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-blue-900 px-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-900 via-blue-800 to-blue-700 px-4 py-10">
       <motion.div
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.4 }}
-        className="bg-white p-8 rounded-lg shadow-xl w-full max-w-md relative"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="bg-white p-8 rounded-2xl shadow-[0_10px_40px_rgba(0,0,0,0.2)] w-full max-w-lg relative"
       >
-        <h2 className="text-2xl font-bold text-center text-[#0a1f44] mb-2">
+        <h2 className="text-3xl font-extrabold text-center text-blue-900 mb-2 tracking-tight">
           Create Your Account
         </h2>
-        <p className="text-sm text-center text-gray-500 mb-4">
+        <p className="text-sm text-center text-gray-500 mb-6">
           Step {step} of 3 — Let’s get you started
         </p>
 
-        <StepIndicator currentStep={step} />
-        <ProgressBar progress={progress} />
+        <ProgressBar step={step} />
+        <form onSubmit={handleSubmit} className="space-y-6 mt-4">
+          {step === 1 && (
+            <StepPersonalInfo
+              form={form}
+              handleChange={handleChange}
+              isValidated={isNINValidated}
+              onValidated={() => setIsNINValidated(true)}
+            />
+          )}
+          {step === 2 && (
+            <StepContactInfo form={form} handleChange={handleChange} />
+          )}
+          {step === 3 && (
+            <StepSecurity form={form} handleChange={handleChange} />
+          )}
 
-        <form onSubmit={handleSubmit} className="space-y-5">
-          <StepForm step={step} form={form} handleChange={handleChange} />
-
-          <div className="flex justify-between pt-2">
+          <div className="flex justify-between pt-4">
             {step > 1 && (
               <button
                 type="button"
                 onClick={prevStep}
-                className="px-5 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300"
+                className="px-5 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition"
               >
                 Back
               </button>
@@ -130,7 +146,7 @@ export default function Signup() {
                 type="button"
                 onClick={nextStep}
                 disabled={!isStepValid()}
-                className={`px-5 py-2 rounded-md ${
+                className={`px-6 py-2 rounded-md font-semibold transition-all duration-300 ${
                   isStepValid()
                     ? "bg-blue-700 text-white hover:bg-blue-800"
                     : "bg-gray-300 text-gray-500 cursor-not-allowed"
@@ -141,7 +157,7 @@ export default function Signup() {
             ) : (
               <button
                 type="submit"
-                className="px-5 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
+                className="px-6 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition"
               >
                 Submit
               </button>

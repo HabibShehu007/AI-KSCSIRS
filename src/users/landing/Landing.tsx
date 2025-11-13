@@ -17,7 +17,7 @@ export default function Landing() {
       </video>
 
       {/* Overlay */}
-      <div className="absolute inset-0 bg-[#0a1f44]/60 z-10" />
+      <div className="absolute inset-0 bg-[#0a1f44]/70 z-10" />
 
       {/* Content */}
       <div className="relative z-20 flex flex-col items-center justify-center h-full text-white text-center px-6 md:px-12 lg:px-24">

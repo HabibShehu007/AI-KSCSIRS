@@ -10,6 +10,9 @@ import {
   Cell,
 } from "recharts";
 
+import { useRef, useState, useEffect } from "react";
+import type { Complaint } from "./data/types";
+
 const monthlyStats = [
   { month: "Jan", messages: 120, crimes: 45 },
   { month: "Feb", messages: 98, crimes: 38 },
@@ -41,8 +44,52 @@ const crimeTypes = [
 const COLORS = ["#0a1f44", "#f59e0b", "#10b981", "#ef4444", "#6366f1"];
 
 export default function Dashboard() {
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [isMuted, setIsMuted] = useState(() => {
+    return localStorage.getItem("police-muted") === "true";
+  });
+
+  const toggleMute = () => {
+    const newState = !isMuted;
+    setIsMuted(newState);
+    localStorage.setItem("police-muted", String(newState));
+  };
+
+  // ✅ Fetch complaints from localStorage
+  const storedComplaints = JSON.parse(
+    localStorage.getItem("complaints-police") || "[]"
+  ) as Complaint[];
+
+  useEffect(() => {
+    const lastCount = Number(
+      localStorage.getItem("police-complaint-count") || "0"
+    );
+    const currentCount = storedComplaints.length;
+
+    if (currentCount > lastCount && !isMuted && audioRef.current) {
+      audioRef.current
+        .play()
+        .catch((err) => console.error("Playback failed:", err));
+    }
+
+    localStorage.setItem("police-complaint-count", String(currentCount));
+  }, [storedComplaints.length, isMuted]);
+
   return (
     <div className="p-6 bg-[#f5f7fa] min-h-screen">
+      {/* ✅ Emergency Alert Sound */}
+      <div className="flex justify-end mb-4">
+        <audio ref={audioRef} src="/alert.mp3" preload="auto" />
+        <button
+          onClick={toggleMute}
+          className={`px-4 py-2 rounded-full font-semibold text-sm ${
+            isMuted ? "bg-gray-400 text-white" : "bg-red-600 text-white"
+          }`}
+        >
+          {isMuted ? "Unmute Alerts" : "Mute Alerts"}
+        </button>
+      </div>
+
       <h1 className="text-3xl font-bold text-[#0a1f44] mb-4">
         Police Department Dashboard
       </h1>
@@ -55,7 +102,7 @@ export default function Dashboard() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         <div className="bg-white p-4 rounded shadow text-[#0a1f44]">
           <h2 className="text-lg font-semibold">Total Complaints</h2>
-          <p className="text-2xl font-bold mt-2">87</p>
+          <p className="text-2xl font-bold mt-2">{storedComplaints.length}</p>
         </div>
         <div className="bg-white p-4 rounded shadow text-green-700">
           <h2 className="text-lg font-semibold">Resolved Cases</h2>
@@ -101,7 +148,7 @@ export default function Dashboard() {
                 outerRadius={80}
                 label
               >
-                {complaintResolution.map((entry, index) => (
+                {complaintResolution.map((_, index) => (
                   <Cell
                     key={`cell-${index}`}
                     fill={COLORS[index % COLORS.length]}
@@ -130,7 +177,7 @@ export default function Dashboard() {
               outerRadius={80}
               label
             >
-              {crimeTypes.map((entry, index) => (
+              {crimeTypes.map((_, index) => (
                 <Cell
                   key={`cell-${index}`}
                   fill={COLORS[index % COLORS.length]}
