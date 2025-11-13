@@ -1,6 +1,15 @@
 import { useEffect, useState } from "react";
 import AgencyCard from "./AgencyCard";
-import { FiShield, FiMessageSquare, FiUsers, FiTruck } from "react-icons/fi";
+import {
+  FiShield,
+  FiUsers,
+  FiMessageSquare,
+  FiTruck,
+  FiAlertCircle,
+  FiEye,
+  FiLock,
+  FiBriefcase,
+} from "react-icons/fi";
 import type { IconType } from "react-icons";
 
 type Department = {
@@ -18,22 +27,55 @@ const departments: Department[] = [
     description: "Report criminal activity or request police assistance.",
   },
   {
-    name: "Immigration",
-    slug: "immigration",
-    icon: FiUsers,
-    description: "Get help with travel documents and border issues.",
+    name: "DSS",
+    slug: "dss",
+    icon: FiLock,
+    description:
+      "Report intelligence-related threats or suspicious covert activity.",
   },
+
+  {
+    name: "Civil Defence",
+    slug: "civildefence",
+    icon: FiAlertCircle,
+    description:
+      "Report threats to national assets or request protective services.",
+  },
+
+  {
+    name: "Vigilante (See Watch)",
+    slug: "vigilante",
+    icon: FiEye,
+    description:
+      "Report local disturbances or request community watch support.",
+  },
+
+  {
+    name: "Road Safety",
+    slug: "roadsafety",
+    icon: FiTruck,
+    description: "Report traffic incidents or unsafe road conditions.",
+  },
+
   {
     name: "Fire Service",
     slug: "fireservice",
     icon: FiMessageSquare,
     description: "Report fire hazards or request emergency response.",
   },
+
   {
-    name: "Road Safety",
-    slug: "roadsafety",
-    icon: FiTruck,
-    description: "Report traffic incidents or unsafe road conditions.",
+    name: "Immigration",
+    slug: "immigration",
+    icon: FiUsers,
+    description: "Get help with travel documents and border issues.",
+  },
+
+  {
+    name: "EFCC",
+    slug: "efcc",
+    icon: FiBriefcase,
+    description: "Report financial crimes, fraud, or corruption cases.",
   },
 ];
 
@@ -69,7 +111,7 @@ export default function UserDashboard() {
       <h2 className="text-2xl font-bold mb-4 text-[#0a1f44]">
         Choose a Department to Report To
       </h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {departments.map((dept) => (
           <AgencyCard key={dept.slug} {...dept} />
         ))}

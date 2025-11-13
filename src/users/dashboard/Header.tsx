@@ -12,47 +12,45 @@ import {
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
 
+  const navLinks = [
+    { to: "/user/dashboard", label: "Home", icon: <FiHome /> },
+    { to: "/user/reports", label: "My Reports", icon: <FiFileText /> },
+    { to: "/user/profile", label: "Profile", icon: <FiUser /> },
+    { to: "/logout", label: "Logout", icon: <FiLogOut /> },
+  ];
+
   return (
     <>
       {/* Desktop Header */}
-      <header className="hidden md:flex justify-between items-center px-6 py-4 bg-[#0a1f44] text-white shadow-md">
-        <h1 className="text-xl font-bold">KSCSIRS Dashboard</h1>
-        <nav className="flex items-center space-x-6 text-sm font-medium">
-          <Link
-            to="/user/dashboard"
-            className="flex items-center gap-2 hover:underline"
-          >
-            <FiHome /> Home
-          </Link>
-          <Link
-            to="/user/reports"
-            className="flex items-center gap-2 hover:underline"
-          >
-            <FiFileText /> My Reports
-          </Link>
-          <Link
-            to="/user/profile"
-            className="flex items-center gap-2 hover:underline"
-          >
-            <FiUser /> Profile
-          </Link>
-          <Link
-            to="/logout"
-            className="flex items-center gap-2 hover:underline"
-          >
-            <FiLogOut /> Logout
-          </Link>
+      <header className="hidden md:flex justify-between items-center px-8 py-4 bg-[#0a1f44] text-white shadow-lg">
+        <h1 className="text-2xl font-extrabold tracking-wide">
+          KSCSIRS Dashboard
+        </h1>
+        <nav className="flex items-center space-x-8 text-sm font-medium">
+          {navLinks.map(({ to, label, icon }) => (
+            <Link
+              key={to}
+              to={to}
+              className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-blue-600 transition"
+            >
+              <span className="text-lg">{icon}</span>
+              <span>{label}</span>
+            </Link>
+          ))}
         </nav>
       </header>
 
       {/* Mobile Top Bar */}
       <div className="md:hidden flex items-center justify-between px-4 py-3 bg-[#0a1f44] text-white shadow-md">
-        <h1 className="text-lg font-bold">KSCSIRS</h1>
-        <button onClick={() => setIsOpen(!isOpen)}>
+        <h1 className="text-lg font-bold tracking-wide">KSCSIRS</h1>
+        <button
+          onClick={() => setIsOpen(!isOpen)}
+          className="p-2 rounded-full bg-blue-600 hover:bg-blue-700 transition"
+        >
           {isOpen ? (
-            <FiX className="text-2xl" />
+            <FiX className="text-xl" />
           ) : (
-            <FiMenu className="text-2xl" />
+            <FiMenu className="text-xl" />
           )}
         </button>
       </div>
@@ -66,34 +64,17 @@ export default function Header() {
         <div className="p-6 space-y-6">
           <h2 className="text-xl font-bold">Menu</h2>
           <nav className="flex flex-col space-y-4 text-base">
-            <Link
-              to="/user/dashboard"
-              onClick={() => setIsOpen(false)}
-              className="flex items-center gap-2 hover:underline"
-            >
-              <FiHome /> Home
-            </Link>
-            <Link
-              to="/user/reports"
-              onClick={() => setIsOpen(false)}
-              className="flex items-center gap-2 hover:underline"
-            >
-              <FiFileText /> My Reports
-            </Link>
-            <Link
-              to="/user/profile"
-              onClick={() => setIsOpen(false)}
-              className="flex items-center gap-2 hover:underline"
-            >
-              <FiUser /> Profile
-            </Link>
-            <Link
-              to="/logout"
-              onClick={() => setIsOpen(false)}
-              className="flex items-center gap-2 hover:underline"
-            >
-              <FiLogOut /> Logout
-            </Link>
+            {navLinks.map(({ to, label, icon }) => (
+              <Link
+                key={to}
+                to={to}
+                onClick={() => setIsOpen(false)}
+                className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-blue-600 transition"
+              >
+                <span className="text-lg">{icon}</span>
+                <span>{label}</span>
+              </Link>
+            ))}
           </nav>
         </div>
       </div>

@@ -115,61 +115,100 @@ export default function ComplaintForm({ department }: Props) {
     <>
       <form
         onSubmit={handleSubmit}
-        className="space-y-6 bg-white p-6 rounded-2xl shadow-2xl border border-blue-100 max-w-xl mx-auto"
+        className="space-y-8 bg-white p-8 rounded-2xl shadow-2xl border border-blue-100 max-w-2xl w-full mx-auto"
       >
-        <div className="grid gap-4">
-          <input
-            type="text"
-            value={user}
-            readOnly
-            placeholder="Full Name"
-            className="bg-gray-100 text-gray-700 px-4 py-2 rounded-md w-full cursor-not-allowed"
-          />
-          <input
-            type="text"
-            value={phone}
-            readOnly
-            placeholder="Phone Number"
-            className="bg-gray-100 text-gray-700 px-4 py-2 rounded-md w-full cursor-not-allowed"
-          />
-          <input
-            type="email"
-            value={email}
-            readOnly
-            placeholder="Email Address"
-            className="bg-gray-100 text-gray-700 px-4 py-2 rounded-md w-full cursor-not-allowed"
-          />
+        <div className="grid gap-6">
+          {/* Full Name & Phone in one row on md+ screens */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1">
+                Full Name
+              </label>
+              <input
+                type="text"
+                value={user}
+                readOnly
+                className="w-full px-4 py-2 bg-gray-100 text-gray-700 rounded-md border border-gray-300 shadow-sm cursor-not-allowed"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1">
+                Phone Number
+              </label>
+              <input
+                type="text"
+                value={phone}
+                readOnly
+                className="w-full px-4 py-2 bg-gray-100 text-gray-700 rounded-md border border-gray-300 shadow-sm cursor-not-allowed"
+              />
+            </div>
+          </div>
 
-          <select
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            className="bg-white border border-gray-300 rounded-md px-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            <option value="">Select Offense</option>
-            {offenses.map((offense) => (
-              <option key={offense} value={offense}>
-                {offense}
-              </option>
-            ))}
-          </select>
+          {/* Email on its own row */}
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-1">
+              Email Address
+            </label>
+            <input
+              type="text"
+              value={email}
+              readOnly
+              className="w-full px-4 py-2 bg-gray-100 text-gray-700 rounded-md border border-gray-300 shadow-sm cursor-not-allowed"
+            />
+          </div>
 
-          <textarea
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            placeholder="Describe the issue briefly..."
-            rows={4}
-            className="border border-gray-300 rounded-md px-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
+          {/* Offense selection */}
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-1">
+              Offense Type
+            </label>
+            <select
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              className="w-full px-4 py-2 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600 transition"
+              required
+            >
+              <option value="">Select Offense</option>
+              {offenses.map((offense) => (
+                <option key={offense} value={offense}>
+                  {offense}
+                </option>
+              ))}
+            </select>
+          </div>
 
-          <input
-            type="text"
-            value={address}
-            onChange={(e) => setAddress(e.target.value)}
-            placeholder="Location of incident"
-            className="border border-gray-300 rounded-md px-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
+          {/* Description */}
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-1">
+              Description
+            </label>
+            <textarea
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              placeholder="Describe the issue clearly and briefly..."
+              rows={4}
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600 transition resize-none"
+              required
+            />
+          </div>
+
+          {/* Location */}
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-1">
+              Location of Incident
+            </label>
+            <input
+              type="text"
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
+              placeholder="Enter address or landmark"
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600 transition"
+              required
+            />
+          </div>
         </div>
 
+        {/* Media Upload */}
         <MediaUpload
           files={files}
           audioURL={audioURL}
@@ -180,11 +219,12 @@ export default function ComplaintForm({ department }: Props) {
           onFileChange={setFiles}
         />
 
-        <div className="text-center pt-4">
+        {/* Submit Button */}
+        <div className="text-center pt-6">
           <button
             type="submit"
             disabled={loading}
-            className={`flex items-center justify-center gap-2 px-6 py-3 rounded-full font-bold text-lg shadow-lg transition ${
+            className={`flex items-center justify-center gap-2 px-6 py-3 rounded-full font-bold text-lg shadow-md transition-all duration-300 ${
               loading
                 ? "bg-blue-400 cursor-not-allowed"
                 : "bg-blue-700 hover:bg-blue-800 text-white"

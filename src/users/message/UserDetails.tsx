@@ -28,12 +28,17 @@ export default function UserDetails({
   offenses,
   onChange,
 }: Props) {
+  const labelClass =
+    "text-sm font-semibold text-[#0a1f44] flex items-center gap-2 mb-2";
+  const inputClass =
+    "w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-600 transition duration-200";
+
   return (
     <div className="space-y-6">
       {/* Auto-filled User Info */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div>
-          <label className="text-sm font-semibold text-gray-700 flex items-center gap-2 mb-1">
+          <label className={labelClass}>
             <FiUser /> Full Name
           </label>
           <input
@@ -41,11 +46,11 @@ export default function UserDetails({
             value={user}
             readOnly
             placeholder="Auto-filled from signup"
-            className="w-full px-4 py-2 bg-gray-100 text-gray-700 rounded-md cursor-not-allowed"
+            className="w-full px-4 py-2 bg-gray-100 text-gray-700 rounded-md border border-gray-300 shadow-sm cursor-not-allowed"
           />
         </div>
         <div>
-          <label className="text-sm font-semibold text-gray-700 flex items-center gap-2 mb-1">
+          <label className={labelClass}>
             <FiPhone /> Phone
           </label>
           <input
@@ -53,11 +58,11 @@ export default function UserDetails({
             value={phone}
             readOnly
             placeholder="Auto-filled from signup"
-            className="w-full px-4 py-2 bg-gray-100 text-gray-700 rounded-md cursor-not-allowed"
+            className="w-full px-4 py-2 bg-gray-100 text-gray-700 rounded-md border border-gray-300 shadow-sm cursor-not-allowed"
           />
         </div>
         <div>
-          <label className="text-sm font-semibold text-gray-700 flex items-center gap-2 mb-1">
+          <label className={labelClass}>
             <FiMail /> Email
           </label>
           <input
@@ -65,20 +70,20 @@ export default function UserDetails({
             value={email}
             readOnly
             placeholder="Auto-filled from signup"
-            className="w-full px-4 py-2 bg-gray-100 text-gray-700 rounded-md cursor-not-allowed"
+            className="w-full px-4 py-2 bg-gray-100 text-gray-700 rounded-md border border-gray-300 shadow-sm cursor-not-allowed"
           />
         </div>
       </div>
 
       {/* Offense Type */}
       <div>
-        <label className="text-sm font-semibold text-gray-700 flex items-center gap-2 mb-1">
+        <label className={labelClass}>
           <FiList /> Offense Type
         </label>
         <select
           value={title}
           onChange={(e) => onChange("title", e.target.value)}
-          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className={`${inputClass} bg-white`}
           required
         >
           <option value="">Select an offense</option>
@@ -92,13 +97,13 @@ export default function UserDetails({
 
       {/* Description */}
       <div>
-        <label className="text-sm font-semibold text-gray-700 flex items-center gap-2 mb-1">
+        <label className={labelClass}>
           <FiEdit2 /> Description
         </label>
         <textarea
           value={description}
           onChange={(e) => onChange("description", e.target.value)}
-          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className={`${inputClass} resize-none`}
           rows={4}
           placeholder="Describe the incident clearly..."
           required
@@ -107,14 +112,14 @@ export default function UserDetails({
 
       {/* Location */}
       <div>
-        <label className="text-sm font-semibold text-gray-700 flex items-center gap-2 mb-1">
+        <label className={labelClass}>
           <FiMapPin /> Location
         </label>
         <input
           type="text"
           value={address}
           onChange={(e) => onChange("address", e.target.value)}
-          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className={inputClass}
           placeholder="Enter address or location"
           required
         />

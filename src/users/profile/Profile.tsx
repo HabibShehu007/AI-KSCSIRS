@@ -1,10 +1,20 @@
 import { useEffect, useState } from "react";
-import { FiUser, FiMail, FiPhone, FiEdit3 } from "react-icons/fi";
+import {
+  FiUser,
+  FiMail,
+  FiPhone,
+  FiMapPin,
+  FiGlobe,
+  FiEdit3,
+} from "react-icons/fi";
 
 type UserInfo = {
   name: string;
   email: string;
   phone: string;
+  state?: string;
+  lga?: string;
+  location?: string;
 };
 
 export default function Profile() {
@@ -12,9 +22,12 @@ export default function Profile() {
     name: "",
     email: "",
     phone: "",
+    state: "",
+    lga: "",
+    location: "",
   });
 
-  const [editing, setEditing] = useState<boolean>(false);
+  const [editing, setEditing] = useState(false);
 
   useEffect(() => {
     const stored = localStorage.getItem("userInfo");
@@ -33,13 +46,12 @@ export default function Profile() {
     setEditing(false);
   };
 
-  const getInitials = (name: string) => {
-    return name
+  const getInitials = (name: string) =>
+    name
       .split(" ")
       .map((n) => n[0])
       .join("")
       .toUpperCase();
-  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
@@ -56,8 +68,9 @@ export default function Profile() {
           </p>
         </div>
 
-        <div className="space-y-5">
-          <div className="flex items-center gap-3 text-gray-800">
+        <div className="space-y-5 text-gray-800">
+          {/* Name */}
+          <div className="flex items-center gap-3">
             <FiUser className="text-blue-600 text-xl" />
             {editing ? (
               <input
@@ -71,12 +84,14 @@ export default function Profile() {
             )}
           </div>
 
-          <div className="flex items-center gap-3 text-gray-800">
+          {/* Email (read-only) */}
+          <div className="flex items-center gap-3">
             <FiMail className="text-blue-600 text-xl" />
             <span className="text-base font-semibold">{userInfo.email}</span>
           </div>
 
-          <div className="flex items-center gap-3 text-gray-800">
+          {/* Phone */}
+          <div className="flex items-center gap-3">
             <FiPhone className="text-blue-600 text-xl" />
             {editing ? (
               <input
@@ -90,6 +105,57 @@ export default function Profile() {
             )}
           </div>
 
+          {/* State */}
+          <div className="flex items-center gap-3">
+            <FiGlobe className="text-blue-600 text-xl" />
+            {editing ? (
+              <input
+                name="state"
+                value={userInfo.state}
+                onChange={handleChange}
+                className="border px-3 py-2 rounded-md w-full font-semibold"
+                placeholder="Enter your state"
+              />
+            ) : (
+              <span className="text-base font-semibold">{userInfo.state}</span>
+            )}
+          </div>
+
+          {/* LGA */}
+          <div className="flex items-center gap-3">
+            <FiMapPin className="text-blue-600 text-xl" />
+            {editing ? (
+              <input
+                name="lga"
+                value={userInfo.lga}
+                onChange={handleChange}
+                className="border px-3 py-2 rounded-md w-full font-semibold"
+                placeholder="Enter your local government"
+              />
+            ) : (
+              <span className="text-base font-semibold">{userInfo.lga}</span>
+            )}
+          </div>
+
+          {/* Location */}
+          <div className="flex items-center gap-3">
+            <FiMapPin className="text-blue-600 text-xl" />
+            {editing ? (
+              <input
+                name="location"
+                value={userInfo.location}
+                onChange={handleChange}
+                className="border px-3 py-2 rounded-md w-full font-semibold"
+                placeholder="Enter your location"
+              />
+            ) : (
+              <span className="text-base font-semibold">
+                {userInfo.location}
+              </span>
+            )}
+          </div>
+
+          {/* Action Button */}
           <div className="text-center pt-4">
             {editing ? (
               <button

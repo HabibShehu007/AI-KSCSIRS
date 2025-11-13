@@ -5,6 +5,7 @@ import ProgressBar from "./ProgressBar";
 import StepPersonalInfo from "./StepPersonalInfo";
 import StepContactInfo from "./StepContactInfo";
 import StepSecurity from "./StepSecurity";
+import { FiCheckCircle } from "react-icons/fi";
 
 type LogPayload = {
   name?: string;
@@ -100,7 +101,7 @@ export default function Signup() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-900 via-blue-800 to-blue-700 px-4 py-10">
+    <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-blue-900 via-blue-800 to-blue-700 px-4 py-10">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -179,25 +180,64 @@ export default function Signup() {
 
         {showSuccess && (
           <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5 }}
-            className="absolute inset-0 bg-white flex flex-col items-center justify-center text-center p-6 rounded-lg shadow-lg"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.4 }}
+            className="absolute inset-0 z-50 flex items-center justify-center bg-white"
           >
             <motion.div
-              initial={{ scale: 0 }}
-              animate={{ scale: [1, 1.2, 1] }}
-              transition={{
-                duration: 0.6,
-                repeat: Infinity,
-                repeatType: "reverse",
-              }}
-              className="text-green-600 text-5xl mb-4"
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ duration: 0.6, ease: "easeOut" }}
+              className="bg-white rounded-xl shadow-2xl p-8 max-w-sm w-full text-center border border-green-200"
             >
-              ✅
+              {/* Animated Icon */}
+              <div className="flex justify-center mb-4">
+                <motion.div
+                  initial={{ scale: 1 }}
+                  animate={{ scale: [1, 1.4, 1], rotate: [0, 15, -15, 0] }}
+                  transition={{
+                    duration: 1.2,
+                    repeat: Infinity,
+                    repeatType: "loop",
+                    ease: "easeInOut",
+                  }}
+                  className="text-green-600"
+                >
+                  <FiCheckCircle className="text-6xl" />
+                </motion.div>
+              </div>
+
+              {/* Animated Heading */}
+              <motion.h2
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3, duration: 0.5 }}
+                className="text-3xl font-black text-[#0a1f44] mb-2 tracking-tight"
+              >
+                SIGNUP SUCCESSFUL
+              </motion.h2>
+
+              {/* Animated Subtext */}
+              <motion.p
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.5, duration: 0.5 }}
+                className="text-base text-gray-700 mb-4 font-medium"
+              >
+                Redirecting to login...
+              </motion.p>
+
+              {/* Footer Note */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.7, duration: 0.5 }}
+                className="text-sm text-gray-500 font-semibold"
+              >
+                Welcome to the civic network 💙
+              </motion.div>
             </motion.div>
-            <h2 className="text-2xl font-bold mb-2">Signup Successful!</h2>
-            <p className="text-base text-gray-700">Redirecting to login...</p>
           </motion.div>
         )}
       </motion.div>

@@ -27,4 +27,29 @@ export const departmentOffenses: Record<string, string[]> = {
     "Traffic Violation",
     "Road Obstruction",
   ],
+  dss: [
+    "Suspicious Activity",
+    "Intelligence Threat",
+    "Covert Surveillance",
+    "National Security Breach",
+  ],
+  civildefence: [
+    "Pipeline Vandalism",
+    "Critical Asset Threat",
+    "Illegal Mining",
+    "Infrastructure Sabotage",
+  ],
+  vigilante: [
+    "Neighborhood Disturbance",
+    "Suspicious Movement",
+    "Local Theft",
+    "Community Dispute",
+  ],
+  efcc: [
+    "Money Laundering",
+    "Embezzlement",
+    "Bribery",
+    "Financial Fraud",
+    "Corruption",
+  ],
 };

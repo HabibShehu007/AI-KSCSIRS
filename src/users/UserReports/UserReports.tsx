@@ -3,28 +3,53 @@ import ReportCard from "./ReportCard";
 import ReportFilter from "./ReportFilter";
 import ReportModal from "./ReportModal";
 
+type Complaint = {
+  id: number;
+  user: string;
+  email: string;
+  phone: string;
+  subject: string;
+  message: string;
+  address: string;
+  files: string[];
+  voiceNote?: string;
+  timestamp: string;
+  status: string;
+  department: string;
+};
+
 export default function UserReports() {
-  const [reports, setReports] = useState<any[]>([]);
-  const [filtered, setFiltered] = useState<any[]>([]);
-  const [userEmail, setUserEmail] = useState("");
+  const [reports, setReports] = useState<Complaint[]>([]);
+  const [filtered, setFiltered] = useState<Complaint[]>([]);
   const [status, setStatus] = useState("");
   const [department, setDepartment] = useState("");
-  const [selectedReport, setSelectedReport] = useState(null);
+  const [selectedReport, setSelectedReport] = useState<Complaint | null>(null);
 
   useEffect(() => {
     const storedUser = localStorage.getItem("userInfo");
+    let email = "";
+
     if (storedUser) {
-      const { email } = JSON.parse(storedUser);
-      setUserEmail(email);
+      const parsed = JSON.parse(storedUser);
+      email = parsed.email;
     }
 
-    const allReports: any[] = [];
-    const departments = ["police", "immigration", "fireservice", "roadsafety"];
+    const allReports: Complaint[] = [];
+    const departments = [
+      "police",
+      "immigration",
+      "fireservice",
+      "roadsafety",
+      "civildefence",
+      "vigilante",
+      "dss",
+      "efcc",
+    ];
 
     departments.forEach((dept) => {
       const deptReports = JSON.parse(
         localStorage.getItem(`complaints_${dept}`) || "[]"
-      );
+      ) as Complaint[];
       allReports.push(...deptReports);
     });
 
@@ -34,12 +59,14 @@ export default function UserReports() {
 
   useEffect(() => {
     let filteredReports = [...reports];
-    if (status)
+    if (status) {
       filteredReports = filteredReports.filter((r) => r.status === status);
-    if (department)
+    }
+    if (department) {
       filteredReports = filteredReports.filter(
         (r) => r.department === department
       );
+    }
     setFiltered(filteredReports);
   }, [status, department, reports]);
 
@@ -74,10 +101,12 @@ export default function UserReports() {
         </div>
       )}
 
-      <ReportModal
-        report={selectedReport}
-        onClose={() => setSelectedReport(null)}
-      />
+      {selectedReport && (
+        <ReportModal
+          report={selectedReport}
+          onClose={() => setSelectedReport(null)}
+        />
+      )}
     </div>
   );
 }

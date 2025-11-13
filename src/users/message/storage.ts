@@ -17,7 +17,7 @@ export type Complaint = {
 
 // Save a complaint to localStorage under the department key
 export function saveComplaint(department: string, data: Complaint): void {
-  const key = `complaints-${department}`;
+  const key = `complaints_${department}`;
   const existing: Complaint[] = JSON.parse(localStorage.getItem(key) || "[]");
   existing.push(data);
   localStorage.setItem(key, JSON.stringify(existing));
